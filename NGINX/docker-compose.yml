@@ -1,0 +1,33 @@
+version: '3.1'
+
+services:
+  database:
+    image: mariadb:10.5
+    restart: always
+    environment:
+      MARIADB_DATABASE: wpdb
+      MARIADB_USER: wp_user
+      MARIADB_PASSWORD: bE9UabWw7rEQJZTq
+      MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
+    volumes:
+      - database:/var/lib/mysql
+
+  wordpress:
+    image: bitnami/wordpress-nginx
+    restart: always
+    ports:
+      - 80:8080
+    depends_on:
+      - database
+    environment:
+      WORDPRESS_BLOG_NAME: 'NGINX'
+      WORDPRESS_DATABASE_HOST: database
+      WORDPRESS_DATABASE_USER: wp_user
+      WORDPRESS_DATABASE_PASSWORD: bE9UabWw7rEQJZTq
+      WORDPRESS_DATABASE_NAME: wpdb
+    volumes:
+      - wordpress:/var/www/html
+
+volumes:
+  wordpress:
+  database:
